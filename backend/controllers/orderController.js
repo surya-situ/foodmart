@@ -1,5 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Order from '../models/orderModel.js';
+import moment from 'moment';
 
 const addOrderItems = asyncHandler(async (req, res) => {
     const {
@@ -20,7 +21,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
           orderItems: orderItems.map((x) => ({
             ...x,
             product: x._id,
-            _id: undefined,
+            // _id: '',
         })),
           user: req.user._id,
           shippingAddress,
@@ -43,7 +44,6 @@ const getMyOrders = asyncHandler(async (req, res) => {
 })
 
 const getOrderById = asyncHandler(async (req, res) => {
-  console.log(req.params);  
     const order = await Order.findById(req.params.id).populate(
       'user',
       'name email'
@@ -57,18 +57,71 @@ const getOrderById = asyncHandler(async (req, res) => {
     }
 });
 
+// const updateOrderToPaid = asyncHandler(async (req, res) => {
+//     const order = await Order.findById(req.params.id);
+
+//     if(order) {
+//       order.isPaid = true;
+//       order.paidAt = Date.now();
+//       order.paymentResult = {
+//         id: req.body.id,
+//         status: req.body.status,
+//         update_time: req.body.update.time,
+//         email_address: req.body.email.email_address,
+//       };
+
+//       const updateOrder = await order.save()
+
+//       res.status(200).json(updateOrder)
+//     } else {
+//       res.status(404)
+//     }
+// })
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-    res.send('update order to paid')
-})
+  const order = await Order.findById(req.params.id);
 
+  if (order) {
+    order.isPaid = true;
+    // order.paidAt = Date.now();
+    // order.paidAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    order.paidAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+
+    const updatedOrder = await order.save();
+
+    res.status(200).json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+});
 
 const updateOrderToDelivered= asyncHandler(async (req, res) => {
-    res.send('update order to delivered')
+    const order = await Order.findById(req.params.id);
+
+    if(order) {
+      order.isDelivered = true;
+      order.deliveredAt = Date.now();
+
+      const updateOrder = await order.save();
+
+      res.status(200).json(updateOrder);
+
+    } else {
+      res.status(404);
+      throw new Error('Order not found')
+    }
 })
 
 const getOrders = asyncHandler(async (req, res) => {
-    res.send('get all orders')
+    const orders = await Order.find({}).populate('user', 'id name');
+    res.status(200).json(orders)
 })
 
 export { addOrderItems, getMyOrders, getOrderById, updateOrderToPaid, updateOrderToDelivered, getOrders };
