@@ -5,6 +5,7 @@ import {FaShoppingCart, FaUser, FaHome, FaHamburger} from 'react-icons/fa';
 import { LinkContainer} from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux';
 import logo from '../assets/logo.png';
+import './file.css'
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
 
@@ -30,17 +31,18 @@ const Header = () => {
     };
 
   return (
-    <header>
-        <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
-            <Container>
+    <header >
+        <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect >
+            <Container className='my-3' >
 
                 <LinkContainer to='/'>
-                    <Navbar.Brand> <img src={logo} alt="Foodmart" /> FoodMart</Navbar.Brand>
+                    {/* <Navbar.Brand> FoodMart</Navbar.Brand> */}
+                    <Navbar.Brand href="/"> <span className='brand'><span className='first-letter'>F</span>OODMART</span> </Navbar.Brand>
                 </LinkContainer>
 
                 <Navbar.Toggle aria-controls= "basic-navbar-nav" />
 
-                <Navbar.Collapse id='basic-navbar-nav'>
+                <Navbar.Collapse id='basic-navbar-nav' style={{color:'white'}}>
                     <Nav className='ms-auto'>
 
                         <LinkContainer to='/'>
