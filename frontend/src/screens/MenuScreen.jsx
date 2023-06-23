@@ -2,6 +2,8 @@ import React from 'react'
 import {Row, Col} from 'react-bootstrap'
 import Product from '../components/Product'
 import { useGetProductsQuery } from '../slices/productApiSlice';
+import ProductCarousel from '../components/ProductCarousel';
+
 
 const HomeScreen = () => {
 
@@ -11,7 +13,7 @@ const HomeScreen = () => {
 
     return (
         <>
-
+            <ProductCarousel />
             { isLoading ? ( <h2>Loading</h2> ) : error ? ( <div>{ error?.data?.message || error.error }</div> ) : (
                 <>
                     
