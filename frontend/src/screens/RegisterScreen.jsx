@@ -36,6 +36,11 @@ const RegisterScreen = () => {
     const submitHandler = async (e) => {
         e.preventDefault();
 
+        if(!name || !email || !password || !confirmPassword) {
+            toast.error("All fields are required");
+            return;
+        }
+
         if(password !== confirmPassword) {
             toast.error('Password do not match');
             return;
