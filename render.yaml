@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: foodmart
+    env: node
+    plan: free
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: MONGO_URI
+        value: YOUR_MONGO_URI
+      - key: JWT_SECRET
+        value: YOUR_JWT_SECRET
